@@ -1,0 +1,26 @@
+cache:
+  root: "D:/equisumm_cache"
+  checkpoints_dir: "D:/equisumm_cache/checkpoints"
+  runs_dir: "D:/equisumm_cache/runs"
+  eval_dir: "D:/equisumm_cache/eval"
+
+model:
+  adapter_dir: "D:/equisumm_cache/checkpoints/equisumm_bart_lora"
+  nli_model: "roberta-large-mnli"
+  device: "auto"
+  fp16: true
+  n_candidates: 4
+  entailment_threshold: 0.5
+  top_k_premise: 3
+  premise_window: 0
+  max_nli_length: 512
+
+reranker:
+  weights:
+    seq_logprob: 0.25
+    entailment_mean: 0.35
+    entity_precision: 0.15
+    numeric_precision: 0.15
+    coverage_entropy: 0.10
+  extractive_top_k: 3
+

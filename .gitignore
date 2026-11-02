@@ -1,0 +1,33 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+*.tmp
+*.temp
+
+# Virtual environments
+.env
+.venv/
+venv/
+env/
+
+# Test & coverage caches
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# EquiSumm Runtime caches and run outputs
+equisumm_cache/
+runs/
+test_runs/
+test_eval/
+eval/
+
+# Allow sample data files
+!samples/*.jsonl
+
+# Operating System files
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,35 @@
+SECTION 1. SHORT TITLE; TABLE OF CONTENTS.
+This Act may be cited as the Clean Energy Innovation and Grid Resiliency Act of 2026.
+SEC. 2. FINDINGS AND PURPOSE.
+Congress finds that modernizing the electrical transmission infrastructure is vital to national security and economic growth.
+The purpose of this Act is to accelerate federal permitting for high-voltage interstate transmission lines and provide low-interest loans for clean grid projects.
+SEC. 3. NATIONAL GRID RELIABILITY INITIATIVE.
+The Secretary of Energy shall establish a competitive grant program to allocate $2.5 billion in funding for advanced energy storage systems.
+Eligible entities include regional transmission organizations, independent system operators, electric cooperatives, and municipal utilities.
+Grants awarded under this section shall not exceed 50% of the total cost of any single capital project.
+SEC. 4. INTERCONNECTION QUEUE STREAMLINING.
+The Federal Energy Regulatory Commission shall promulgate rules requiring transmission providers to adopt cluster study methodologies for generator interconnection requests.
+Transmission providers shall complete system impact studies within 180 days of queue closure.
+Failure to meet statutory deadlines without good cause shall result in administrative penalties of up to $50,000 per business day.
+SEC. 5. CRITICAL MINERAL SUPPLY SECURITY.
+The Director of the United States Geological Survey shall update the national critical minerals inventory biannually.
+There is authorized to be appropriated $150 million to support domestic processing technologies for lithium, cobalt, and rare earth elements.
+Projects receiving financial support shall comply with prevailing wage requirements under subchapter IV of chapter 31 of title 40, United States Code.
+SEC. 6. WORKFORCE TRANSITION ASSISTANCE.
+The Secretary of Labor shall establish training and apprenticeship programs in communities affected by the closure of fossil fuel power generating facilities.
+Appropriations of $300 million are authorized for fiscal years 2027 through 2031 to fund technical certifications in wind, solar, and battery storage installation.
+Priority in awarding training grants shall be given to veterans and historically underrepresented groups in technical trades.
+SEC. 7. CYBERSECURITY ENHANCEMENTS FOR BULK POWER SYSTEMS.
+The Secretary of Homeland Security, in coordination with the National Institute of Standards and Technology, shall publish comprehensive zero-trust network guidelines for electric grid operators within 270 days.
+Electric utilities serving more than 100,000 customers must certify compliance with national cyber defense standards annually.
+An emergency reserve fund of $500 million is authorized to assist rural cooperatives with immediate malware mitigation and ransomware incident recovery.
+SEC. 8. INTERAGENCY TASK FORCE ON PERMITTING COORDINATION.
+There is established an Interagency Task Force comprised of representatives from the Department of the Interior, the Environmental Protection Agency, and the Army Corps of Engineers.
+The Task Force shall develop unified environmental review schedules for linear energy infrastructure crossing federal lands.
+Environmental assessments shall not exceed 12 months in duration unless an extension is specifically approved by the President.
+SEC. 9. SEVERABILITY AND SAVINGS CLAUSE.
+If any provision of this Act or the application thereof to any person or circumstance is held invalid, the remainder of the Act shall not be affected thereby.
+Nothing in this Act shall be construed to diminish the statutory authority of state public utility commissions regarding retail electric rate structures.
+SEC. 10. REPORT TO CONGRESS.
+Not later than two years after the date of enactment of this Act, the Comptroller General of the United States shall submit to the Committee on Energy and Natural Resources a comprehensive performance audit of all grant allocations made under this Act.
+

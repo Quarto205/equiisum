@@ -1,0 +1,48 @@
+{
+  "base_model_id": "facebook/bart-base",
+  "model_key": "bart_base",
+  "task_prefix": "",
+  "max_source_tokens": 1024,
+  "max_target_tokens": 256,
+  "lora": {
+    "r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "bias": "none",
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ]
+  },
+  "train": {
+    "epochs": 3,
+    "lr": 0.0003,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.06,
+    "max_grad_norm": 1.0,
+    "label_smoothing": 0.1,
+    "per_device_batch": 8,
+    "grad_accum": 4,
+    "eval_every": 50,
+    "early_stopping_patience": 3
+  },
+  "generation": {
+    "num_beams": 4,
+    "max_new_tokens": 200,
+    "min_new_tokens": 20,
+    "no_repeat_ngram_size": 3,
+    "length_penalty": 1.0,
+    "early_stopping": true
+  },
+  "n_train": 2500,
+  "n_val": 200,
+  "val_rouge": {
+    "rouge1": 38.55,
+    "rouge2": 21.52,
+    "rougeL": 28.54
+  },
+  "eval_loss": 3.859452962875366,
+  "transformers": "4.57.6",
+  "peft": "0.21.2",
+  "created_utc": "2026-11-01T12:17:19+00:00"
+}
