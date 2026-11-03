@@ -168,3 +168,4 @@ The UI maintains strict separation of concerns. Page files contain no machine le
 | **Evaluate** | `pages/4_Evaluate.py` | Benchmark runner comparing ROUGE vs NLI/fact precision; detects metric divergence. |
 | **Embeddings** | `pages/5_Embeddings.py` | 2D t-SNE scatter plot of sentences (max 300 points, cached per session). |
 | **Runs & Settings** | `pages/6_Runs_and_Settings.py` | Run history manager, GPU VRAM allocation monitor, threshold configuration, offline self-test. |
+

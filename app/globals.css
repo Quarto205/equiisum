@@ -1,0 +1,222 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #050505;
+  --foreground: #f3f4f6;
+  --card: #0b0d12;
+  --card-foreground: #f3f4f6;
+  --popover: #0b0d12;
+  --popover-foreground: #f3f4f6;
+  --primary: #4ade80;
+  --primary-foreground: #050505;
+  --secondary: #131720;
+  --secondary-foreground: #f3f4f6;
+  --muted: #161b26;
+  --muted-foreground: #9ca3af;
+  --accent: #22c55e;
+  --accent-foreground: #050505;
+  --destructive: #ef4444;
+  --destructive-foreground: #fef2f2;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #4ade80;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #050505;
+  --foreground: #f3f4f6;
+  --card: #0b0d12;
+  --card-foreground: #f3f4f6;
+  --popover: #0b0d12;
+  --popover-foreground: #f3f4f6;
+  --primary: #4ade80;
+  --primary-foreground: #050505;
+  --secondary: #131720;
+  --secondary-foreground: #f3f4f6;
+  --muted: #161b26;
+  --muted-foreground: #9ca3af;
+  --accent: #22c55e;
+  --accent-foreground: #050505;
+  --destructive: #ef4444;
+  --destructive-foreground: #fef2f2;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #4ade80;
+}
+
+@theme inline {
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --font-pixel: 'Courier Prime', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-color: #050505;
+    color: #e5e5e5;
+  }
+}
+
+/* Cyberpunk terminal grid */
+.cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.cyber-grid-dense {
+  background-image: 
+    linear-gradient(to right, rgba(74, 222, 128, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(74, 222, 128, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Neon Glows */
+.neon-glow-sm {
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.2);
+}
+
+.neon-glow {
+  box-shadow: 0 0 24px rgba(74, 222, 128, 0.25);
+}
+
+.neon-border {
+  border-color: rgba(74, 222, 128, 0.35);
+}
+
+/* Glitch Animation */
+@keyframes glitch-shift {
+  0%, 100% {
+    transform: translate(0);
+  }
+  33% {
+    transform: translate(-2px, 2px);
+  }
+  66% {
+    transform: translate(2px, -2px);
+  }
+}
+
+@keyframes glitch-opacity {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.glitch-layer {
+  animation: glitch-shift 5s infinite ease-in-out, glitch-opacity 3s infinite ease-in-out;
+}
+
+/* Word reveal — blur + translateY */
+@keyframes word-reveal {
+  0% {
+    opacity: 0;
+    filter: blur(24px);
+    transform: translateY(24px);
+  }
+  60% {
+    filter: blur(3px);
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px);
+  }
+}
+
+.word-reveal {
+  opacity: 0;
+  animation: word-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+/* Pulse dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1) }
+  50% { opacity: 0.4; transform: scale(0.8) }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
+
+/* Marquee animations */
+@keyframes marqueeLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.333%); }
+}
+@keyframes marqueeRight {
+  from { transform: translateX(-33.333%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes prSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logIn {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
