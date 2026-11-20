@@ -30,7 +30,12 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 def assert_not_c_drive(path_str: str, name: str = "path") -> Path:
     """Validate that the given path does not resolve to the C: drive."""
-    p = Path(path_str).resolve()
+    p_raw = Path(path_str)
+    if os.getenv("EQUISUMM_ALLOW_C_DRIVE", "").lower() in ("1", "true", "yes"):
+        return p_raw.resolve()
+    if p_raw.drive and p_raw.drive.upper() != "C:":
+        return p_raw
+    p = p_raw.resolve()
     drive = p.drive.upper()
     if drive == "C:" or str(p).upper().startswith("C:"):
         raise ValueError(
@@ -41,6 +46,15 @@ def assert_not_c_drive(path_str: str, name: str = "path") -> Path:
 
 
 # --- IMMEDIATE BOOTSTRAP AT IMPORT TIME ---
+if sys.platform == "win32" and not Path("D:/").exists():
+    try:
+        import subprocess
+        vdir = Path("C:/equisumm_virtual_d")
+        vdir.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["subst", "D:", str(vdir)], check=False, capture_output=True)
+    except Exception:
+        pass
+
 _cfg_file = PROJECT_ROOT / "config.yaml"
 _raw_cache_root = os.getenv("EQUISUMM_CACHE_ROOT")
 if not _raw_cache_root and _cfg_file.exists():

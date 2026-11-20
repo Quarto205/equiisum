@@ -1,6 +1,6 @@
 # EquiSumm: Verified Document Summarization MVP
 
-EquiSumm is an AI-assisted document summarization and verification tool designed for complex legal, financial, and legislative texts. It summarizes documents using a fine-tuned BART-base + LoRA adapter, verifies each generated sentence against the source using attention-guided Natural Language Inference (NLI) and strict numeric/entity extraction, and transparently explains why each sentence is trusted or flagged.
+EquiSumm is an AI-assisted document summarization and verification platform designed for complex legal, financial, and legislative texts. It summarizes documents using a fine-tuned BART-base + LoRA adapter, verifies each generated sentence against the source using attention-guided Natural Language Inference (NLI) and strict numeric/entity extraction, and transparently explains why each sentence is trusted or flagged.
 
 > **Architecture Documentation:** For detailed design specifications, data contracts, and memory management diagrams, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -15,7 +15,7 @@ EquiSumm is an AI-assisted document summarization and verification tool designed
    - Detects numeric scale mismatches (`$1.2 million` vs `$1.2 billion`), direction conflicts (`fell 8%` vs `rose 8%`), currency changes, percent misalignments, and unsupported entities.
 3. **Hard-Constraint Reranker & Fallback Cascade**:
    - **ACCEPT**: Feasible candidate with zero fact errors and all sentences above the entailment threshold.
-   - **ACCEPT_PRUNED**: Automatically removes flagged sentences if >= 1 supported sentence remains.
+   - **ACCEPT_PRUNED**: Automatically removes flagged sentences if $\ge 1$ supported sentence remains.
    - **EXTRACTIVE_FALLBACK**: Extracts top-k salient source sentences using cross-attention coverage.
    - **ESCALATE**: Escalates to human expert review if the document cannot be safely summarized.
 4. **Transparent "Why Not #1?" Explanations**:
@@ -28,37 +28,39 @@ EquiSumm is an AI-assisted document summarization and verification tool designed
 ## Directory Architecture
 
 ```
-equisumm_mvp/             # Core working modules
-  contracts.py            # Dataclasses (Candidate, Attention, NLIResult, FactReport)
-  tokenization.py         # Sentence splitting & boundary truncation index
-  hf_seq2seq.py           # HFSeq2SeqSummarizer (BART-base + LoRA)
-  extractor.py            # CrossAttentionExtractor
-  nli_model.py            # NLIVerifier (RoBERTa-large-MNLI)
-  fact_verifier.py        # Strict numeric, scale, currency, direction, entity checks
-  smoke_test.py           # Offline assertion tests and full pipeline check
-app/
-  config.py               # Path guard (non-C: drive) and environment bootstrap
-  ui_utils.py             # Streamlit theme, verdict styles, file readers, export tools
-  Home.py                 # Multi-page Streamlit Home (Verify page)
-  services/
-    pipeline.py           # 6-stage end-to-end pipeline with session model caching
-    reranker.py           # Hard constraints, composite soft scoring, and fallbacks
-    evaluate.py           # ROUGE-1/2/L vs NLI & factual precision benchmark
-    viz.py                # Plotly attention heatmap, coverage bar chart, t-SNE projection
-    store.py              # Run persistence & export (JSON, Markdown, CSV) under CACHE_ROOT/runs
-  pages/
-    1_Fact_Check.py       # Side-by-side numeric/entity audit table with status filtering
-    2_Attention_Explorer.py # Attention matrix, coverage distribution & attribution explorer
-    3_Compare_Candidates.py # Beam candidates comparison table & "Why not #1?" explanation
-    4_Evaluate.py         # Benchmark runner and high-ROUGE factuality divergence report
-    5_Embeddings.py       # 2D t-SNE sentence embedding scatter plot
-    6_Runs_and_Settings.py # Saved runs history, GPU memory monitor, settings, and self-test
-samples/                  # 6 sample inputs for legal, financial, and benchmark use cases
-tests/                    # Pytest test suite (15 unit tests)
-config.yaml               # System settings and reranker weights
-.env.example              # Environment variables template
-requirements.txt          # Python dependencies
-CHANGES.md                # Minimal modifications log
+equiisum/
+├── backend/                  # FastAPI REST API & async job queue
+│   ├── main.py               # API endpoints (/api/health, /api/jobs, /api/runs, etc.)
+│   ├── schemas.py            # Pydantic data schemas
+│   └── services/             # Pipeline adapters & serialized JobManager
+├── frontend/                 # React 18 SPA (Vite + Tailwind CSS + Lucide Icons)
+│   ├── src/
+│   │   ├── App.jsx           # Main React application view container
+│   │   ├── api.js            # REST API client
+│   │   └── index.css         # Styling
+│   ├── index.html            # Vite HTML template
+│   └── package.json          # Frontend dependencies
+├── equisumm_mvp/             # Core Machine Learning & Verification Modules
+│   ├── contracts.py          # Dataclasses (Candidate, Attention, NLIResult, FactReport)
+│   ├── tokenization.py       # Sentence boundary splitting & truncation indexing
+│   ├── hf_seq2seq.py         # HFSeq2SeqSummarizer (BART-base + LoRA)
+│   ├── extractor.py          # CrossAttentionExtractor
+│   ├── nli_model.py          # NLIVerifier (RoBERTa-large-MNLI)
+│   ├── fact_verifier.py      # Strict numeric, scale, currency, direction, entity checks
+│   └── smoke_test.py         # Offline assertion tests and pipeline verification
+├── equisumm_bart_lora/       # Pre-trained BART-base LoRA adapter checkpoint & tokenizer
+├── app/                      # Shared Services & Legacy Streamlit Interface
+│   ├── config.py             # System configuration & path guard bootstrap
+│   ├── ui_utils.py           # Visualization & export helpers
+│   ├── Home.py               # Streamlit entry point
+│   ├── services/             # Pipeline, Evaluator, Reranker, Store, Viz services
+│   └── pages/                # Streamlit secondary pages
+├── samples/                  # Pre-packaged financial, legal, and legislative test documents
+├── tests/                    # Pytest unit test suite (15 tests)
+├── config.yaml               # System parameters & reranker weights
+├── requirements.txt          # Python dependencies
+├── README.md                 # Project guide (this document)
+└── ARCHITECTURE.md           # Full system architecture specification
 ```
 
 ---
@@ -67,82 +69,102 @@ CHANGES.md                # Minimal modifications log
 
 ### Prerequisites
 - Python 3.10+
-- Non-`C:` drive for all caches and checkpoints (e.g. `D:/equisumm_cache`)
-- NVIDIA GPU with 6GB VRAM (or CPU mode)
+- Node.js 18+ & npm
+- NVIDIA GPU with 6GB+ VRAM (or CPU mode)
 
-### 1. Install Dependencies
+### 1. Install Python Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configure Environment
-Copy `.env.example` to `.env` or edit `config.yaml`:
+### 2. Install Frontend Dependencies
 ```bash
-cp .env.example .env
-```
-Default configuration:
-```env
-EQUISUMM_CACHE_ROOT=D:/equisumm_cache
-EQUISUMM_DEVICE=cuda
-EQUISUMM_FP16=true
-EQUISUMM_ADAPTER_DIR=D:/equisumm_cache/checkpoints/equisumm_bart_lora
-EQUISUMM_NLI_MODEL=roberta-large-mnli
+cd frontend
+npm install
+cd ..
 ```
 
-> **Path Guard Notice:** The application enforces a strict path guard. If `EQUISUMM_CACHE_ROOT` or any checkpoint/run path resolves to `C:`, it will fail immediately to protect your primary system drive.
+### 3. Drive & Path Guard Configuration
+
+The application protects your system drive by ensuring model caches and outputs do not fill partition `C:`.
+
+- **If your system has a secondary drive (e.g., `D:`):**
+  Ensure directories in `config.yaml` point to `D:/...`.
+
+- **If your machine only has drive `C:`:**
+  You can either create a virtual mapped drive in PowerShell:
+  ```powershell
+  New-Item -ItemType Directory -Path "C:\equisumm_virtual_d" -Force
+  subst D: "C:\equisumm_virtual_d"
+  ```
+  Or set `EQUISUMM_ALLOW_C_DRIVE=true` in your `.env` file or environment:
+  ```powershell
+  $env:EQUISUMM_ALLOW_C_DRIVE="true"
+  ```
 
 ---
 
 ## Running the Application
 
-Launch the Streamlit app:
-```bash
-streamlit run app/Home.py
-```
-Or from the root directory:
-```bash
-streamlit run Home.py
-```
+### Modern React + FastAPI Stack (Primary)
 
-### Navigating the Pages
-1. **Verify (Home)**:
-   - Click one of the 4 sample buttons (Earnings Report, Services Agreement, Legislative Bill, Investment Memo) or paste custom text / upload a `.txt` or `.pdf`.
-   - Click **Summarize & Verify** to run the pipeline.
-   - Click individual sentences to highlight their source premise and view NLI probabilities.
-2. **Fact Check**:
-   - Review every number, scale, currency, percentage, and named entity. Filter by status (`Scale Mismatch`, `Direction Conflict`, `Verified`, etc.).
-3. **Attention Explorer**:
-   - Inspect the cross-attention matrix heatmap, view which parts of the document were ignored in the coverage bar, and check token entropy.
-4. **Compare Candidates**:
-   - View all beam search candidates side-by-side with logprobs, entailment means, and the composite soft score. Read the "Why not #1?" explanation.
-5. **Evaluate**:
-   - Run benchmark evaluation on the built-in dataset or upload custom `.jsonl` data. Inspect the high-ROUGE vs factuality divergence cases.
-6. **Embeddings**:
-   - View the 2D t-SNE projection of source and summary sentences color-coded by factual support status.
-7. **Runs & Settings**:
-   - Browse saved run history, reopen or delete previous runs, check GPU VRAM allocation, and trigger the offline self-test.
+The application runs as a decoupled React client and FastAPI backend:
+
+#### 1. Start the FastAPI Backend
+From the repository root:
+```powershell
+python -m uvicorn backend.main:app --reload --port 8000
+```
+- API Base URL: `http://localhost:8000`
+- Interactive OpenAPI Docs: `http://localhost:8000/docs`
+
+#### 2. Start the React Frontend
+In a separate terminal:
+```powershell
+cd frontend
+npm run dev
+```
+- Open your browser at **`http://localhost:5173`**
+
+---
+
+### Alternative: Legacy Streamlit Interface
+
+If you wish to view the legacy Streamlit prototype:
+```powershell
+streamlit run app/Home.py --server.port 8501
+```
+- Accessible at `http://localhost:8501`
 
 ---
 
 ## Running Tests
 
-### 1. Offline Fact Checks
+### 1. Offline Fact Verification Self-Test
+Runs deterministic assertion checks on scale mismatches, direction conflicts, currency errors, and unsupported entities without loading heavy models:
 ```bash
 python equisumm_mvp/smoke_test.py
 ```
-Expected output:
-```
-offline fact checks: OK
-```
+*Expected output: `offline fact checks: OK`*
 
-### 2. Full Pytest Suite (15 Unit Tests)
+### 2. Full Pytest Backend Suite (21 Unit & Integration Tests)
 ```bash
 pytest
 ```
 Covers:
+- `tests/test_api.py`: FastAPI health, sample catalog, validation errors, asynchronous job lifecycle, SSE event streaming, report export, and settings.
 - `tests/test_fact_verifier.py`: Scale mismatches, direction conflicts, currency errors, unsupported entities.
-- `tests/test_reranker.py`: Feasible-first selection, prune fallback, extractive fallback, escalate fallback, and "why not #1?" generation.
+- `tests/test_reranker.py`: Feasible-first selection, prune fallback, extractive fallback, escalate fallback, and "Why not #1?" generation.
 - `tests/test_tokenization.py`: Sentence boundary splitting and source index truncation.
 - `tests/test_store.py`: Persistence and Markdown/CSV/JSON export.
 - `tests/test_evaluate.py`: ROUGE and factuality metric benchmark computation.
+
+### 3. Frontend Vitest Suite (9 Component Tests)
+```bash
+cd frontend
+npm test
+```
+Covers:
+- `frontend/src/__tests__/VerdictBadge.test.jsx`: Multi-state status badges (`ACCEPT`, `ACCEPT_PRUNED`, `EXTRACTIVE_FALLBACK`, `ESCALATE`, etc.).
+- `frontend/src/__tests__/AttentionViz.test.jsx`: Attention heatmaps, source coverage distribution, and 2D t-SNE sentence embedding scatter plot.
 

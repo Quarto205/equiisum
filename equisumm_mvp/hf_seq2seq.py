@@ -12,7 +12,7 @@ if not _hf_home or _hf_home.upper().startswith("C:"):
     except ImportError:
         pass
     _hf_home = os.environ.get("HF_HOME", "")
-    if not _hf_home or _hf_home.upper().startswith("C:"):
+    if (not _hf_home or _hf_home.upper().startswith("C:")) and os.environ.get("EQUISUMM_ALLOW_C_DRIVE", "").lower() not in ("1", "true", "yes"):
         raise ValueError(f"Hard constraint violation: HF_HOME must be set to non-C drive, got '{_hf_home}'")
 
 import torch

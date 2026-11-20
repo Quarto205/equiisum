@@ -1,3 +1,18 @@
+## Repository Consolidation & Single-Drive Support
+
+1. **Clean Decoupled Architecture**:
+   - Removed experimental v0 Next.js mockup files (`components/`, `hooks/`, `lib/`, `app/page.tsx`, `app/layout.tsx`, `package.json`, etc.) that conflicted with the actual React + FastAPI application.
+   - Removed loose duplicate python modules from root (`contracts.py`, `extractor.py`, `fact_verifier.py`, `hf_seq2seq.py`, `nli_model.py`, `tokenization.py`, `smoke_test.py`, `api.py`), keeping `equisumm_mvp/` as the single authoritative source of truth.
+   - Removed unresolved git merge conflict markers in `ARCHITECTURE.md`.
+   - Updated `README.md` to establish the modern React (`frontend/`) + FastAPI (`backend/`) stack as the primary interface, with Streamlit documented as legacy.
+
+2. **Single-Drive & Virtual Drive Flexibility**:
+   - Enhanced `assert_not_c_drive()` in `app/config.py` to support virtual mapped drives (`subst D:`) and the `EQUISUMM_ALLOW_C_DRIVE=true` environment flag for machines with a single physical drive partition.
+   - Updated `equisumm_mvp/hf_seq2seq.py` and `equisumm_mvp/nli_model.py` to respect `EQUISUMM_ALLOW_C_DRIVE`.
+   - Verified that all 15 unit tests and smoke tests pass cleanly.
+
+---
+
 ## Cyberpunk Developer UI Frontend (Recreation & Build)
 
 1. **Dark Cyberpunk Developer-Tool Visual System**:

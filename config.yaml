@@ -1,14 +1,14 @@
 cache:
-  root: "D:/equisumm_cache"
-  checkpoints_dir: "D:/equisumm_cache/checkpoints"
-  runs_dir: "D:/equisumm_cache/runs"
-  eval_dir: "D:/equisumm_cache/eval"
+  root: "D:/nlp/equiisum/cache"
+  checkpoints_dir: "D:/nlp/equiisum/cache/checkpoints"
+  runs_dir: "D:/nlp/equiisum/cache/runs"
+  eval_dir: "D:/nlp/equiisum/cache/eval"
 
 model:
-  adapter_dir: "D:/equisumm_cache/checkpoints/equisumm_bart_lora"
+  adapter_dir: "D:/nlp/equiisum/equisumm_bart_lora"
   nli_model: "roberta-large-mnli"
   device: "auto"
-  fp16: true
+  fp16: false
   n_candidates: 4
   entailment_threshold: 0.5
   top_k_premise: 3
@@ -23,4 +23,5 @@ reranker:
     numeric_precision: 0.15
     coverage_entropy: 0.10
   extractive_top_k: 3
+
 
